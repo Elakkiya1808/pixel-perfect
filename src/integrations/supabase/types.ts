@@ -14,16 +14,313 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      courses: {
+        Row: {
+          code: string
+          consecutive_block: boolean
+          course_type: string
+          created_at: string
+          credit: number
+          department: string
+          faculty_id: string | null
+          id: string
+          max_periods_per_day: number
+          name: string
+          periods_per_week: number
+          required_hours: number
+          room_type: string
+          section: string
+          student_count: number
+        }
+        Insert: {
+          code: string
+          consecutive_block?: boolean
+          course_type: string
+          created_at?: string
+          credit: number
+          department: string
+          faculty_id?: string | null
+          id?: string
+          max_periods_per_day: number
+          name: string
+          periods_per_week: number
+          required_hours: number
+          room_type: string
+          section: string
+          student_count?: number
+        }
+        Update: {
+          code?: string
+          consecutive_block?: boolean
+          course_type?: string
+          created_at?: string
+          credit?: number
+          department?: string
+          faculty_id?: string | null
+          id?: string
+          max_periods_per_day?: number
+          name?: string
+          periods_per_week?: number
+          required_hours?: number
+          room_type?: string
+          section?: string
+          student_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courses_faculty_id_fkey"
+            columns: ["faculty_id"]
+            isOneToOne: false
+            referencedRelation: "faculty"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      faculty: {
+        Row: {
+          created_at: string
+          department: string
+          email: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          email: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          email?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      generation_runs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          generations: number
+          hard_violations: number
+          id: string
+          initial_fitness: number
+          optimized_fitness: number
+          population: number
+          soft_violations: number
+          validation_score: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          generations?: number
+          hard_violations?: number
+          id?: string
+          initial_fitness?: number
+          optimized_fitness?: number
+          population?: number
+          soft_violations?: number
+          validation_score?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          generations?: number
+          hard_violations?: number
+          id?: string
+          initial_fitness?: number
+          optimized_fitness?: number
+          population?: number
+          soft_violations?: number
+          validation_score?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          department: string | null
+          faculty_id: string | null
+          full_name: string | null
+          id: string
+          is_active: boolean
+          section: string | null
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          department?: string | null
+          faculty_id?: string | null
+          full_name?: string | null
+          id: string
+          is_active?: boolean
+          section?: string | null
+          username: string
+        }
+        Update: {
+          created_at?: string
+          department?: string | null
+          faculty_id?: string | null
+          full_name?: string | null
+          id?: string
+          is_active?: boolean
+          section?: string | null
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_faculty_id_fkey"
+            columns: ["faculty_id"]
+            isOneToOne: false
+            referencedRelation: "faculty"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rooms: {
+        Row: {
+          capacity: number
+          created_at: string
+          id: string
+          room_number: string
+          room_type: string
+        }
+        Insert: {
+          capacity: number
+          created_at?: string
+          id?: string
+          room_number: string
+          room_type: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          id?: string
+          room_number?: string
+          room_type?: string
+        }
+        Relationships: []
+      }
+      semester_settings: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          period_duration_minutes: number
+          semester_end_date: string | null
+          semester_months: number
+          semester_name: string
+          semester_start_date: string | null
+          teaching_weeks: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          period_duration_minutes?: number
+          semester_end_date?: string | null
+          semester_months?: number
+          semester_name: string
+          semester_start_date?: string | null
+          teaching_weeks?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          period_duration_minutes?: number
+          semester_end_date?: string | null
+          semester_months?: number
+          semester_name?: string
+          semester_start_date?: string | null
+          teaching_weeks?: number
+        }
+        Relationships: []
+      }
+      timetable: {
+        Row: {
+          course_id: string
+          created_at: string
+          day: string
+          id: string
+          occurrence: number
+          period: number
+          room_id: string | null
+          timing: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          day: string
+          id?: string
+          occurrence: number
+          period: number
+          room_id?: string | null
+          timing: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          day?: string
+          id?: string
+          occurrence?: number
+          period?: number
+          room_id?: string | null
+          timing?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "timetable_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "faculty" | "student"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +447,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "faculty", "student"],
+    },
   },
 } as const
