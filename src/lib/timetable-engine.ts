@@ -40,6 +40,7 @@ export interface EngineCourse {
   code: string;
   name: string;
   credit: number;
+  required_hours: number;
   course_type: string;
   faculty_id: string | null;
   department: string;
