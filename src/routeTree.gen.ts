@@ -12,8 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAdminCoursesRouteImport } from './routes/_authenticated/admin/courses'
 import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin/dashboard'
+import { Route as AuthenticatedAdminFacultyRouteImport } from './routes/_authenticated/admin/faculty'
 import { Route as AuthenticatedAdminGenerateRouteImport } from './routes/_authenticated/admin/generate'
+import { Route as AuthenticatedAdminRoomsRouteImport } from './routes/_authenticated/admin/rooms'
+import { Route as AuthenticatedAdminSemesterRouteImport } from './routes/_authenticated/admin/semester'
+import { Route as AuthenticatedAdminTimetableRouteImport } from './routes/_authenticated/admin/timetable'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,10 +34,22 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminCoursesRoute =
+  AuthenticatedAdminCoursesRouteImport.update({
+    id: '/admin/courses',
+    path: '/admin/courses',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminDashboardRoute =
   AuthenticatedAdminDashboardRouteImport.update({
     id: '/admin/dashboard',
     path: '/admin/dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminFacultyRoute =
+  AuthenticatedAdminFacultyRouteImport.update({
+    id: '/admin/faculty',
+    path: '/admin/faculty',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminGenerateRoute =
@@ -41,39 +58,94 @@ const AuthenticatedAdminGenerateRoute =
     path: '/admin/generate',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminRoomsRoute = AuthenticatedAdminRoomsRouteImport.update({
+  id: '/admin/rooms',
+  path: '/admin/rooms',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminSemesterRoute =
+  AuthenticatedAdminSemesterRouteImport.update({
+    id: '/admin/semester',
+    path: '/admin/semester',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminTimetableRoute =
+  AuthenticatedAdminTimetableRouteImport.update({
+    id: '/admin/timetable',
+    path: '/admin/timetable',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/admin/faculty': typeof AuthenticatedAdminFacultyRoute
   '/admin/generate': typeof AuthenticatedAdminGenerateRoute
+  '/admin/rooms': typeof AuthenticatedAdminRoomsRoute
+  '/admin/semester': typeof AuthenticatedAdminSemesterRoute
+  '/admin/timetable': typeof AuthenticatedAdminTimetableRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/admin/faculty': typeof AuthenticatedAdminFacultyRoute
   '/admin/generate': typeof AuthenticatedAdminGenerateRoute
+  '/admin/rooms': typeof AuthenticatedAdminRoomsRoute
+  '/admin/semester': typeof AuthenticatedAdminSemesterRoute
+  '/admin/timetable': typeof AuthenticatedAdminTimetableRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/admin/courses': typeof AuthenticatedAdminCoursesRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/_authenticated/admin/faculty': typeof AuthenticatedAdminFacultyRoute
   '/_authenticated/admin/generate': typeof AuthenticatedAdminGenerateRoute
+  '/_authenticated/admin/rooms': typeof AuthenticatedAdminRoomsRoute
+  '/_authenticated/admin/semester': typeof AuthenticatedAdminSemesterRoute
+  '/_authenticated/admin/timetable': typeof AuthenticatedAdminTimetableRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/admin/dashboard' | '/admin/generate'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/admin/courses'
+    | '/admin/dashboard'
+    | '/admin/faculty'
+    | '/admin/generate'
+    | '/admin/rooms'
+    | '/admin/semester'
+    | '/admin/timetable'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/admin/dashboard' | '/admin/generate'
+  to:
+    | '/'
+    | '/auth'
+    | '/admin/courses'
+    | '/admin/dashboard'
+    | '/admin/faculty'
+    | '/admin/generate'
+    | '/admin/rooms'
+    | '/admin/semester'
+    | '/admin/timetable'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/admin/courses'
     | '/_authenticated/admin/dashboard'
+    | '/_authenticated/admin/faculty'
     | '/_authenticated/admin/generate'
+    | '/_authenticated/admin/rooms'
+    | '/_authenticated/admin/semester'
+    | '/_authenticated/admin/timetable'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -105,11 +177,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/courses': {
+      id: '/_authenticated/admin/courses'
+      path: '/admin/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AuthenticatedAdminCoursesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/dashboard': {
       id: '/_authenticated/admin/dashboard'
       path: '/admin/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AuthenticatedAdminDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/faculty': {
+      id: '/_authenticated/admin/faculty'
+      path: '/admin/faculty'
+      fullPath: '/admin/faculty'
+      preLoaderRoute: typeof AuthenticatedAdminFacultyRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/generate': {
@@ -119,17 +205,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminGenerateRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/rooms': {
+      id: '/_authenticated/admin/rooms'
+      path: '/admin/rooms'
+      fullPath: '/admin/rooms'
+      preLoaderRoute: typeof AuthenticatedAdminRoomsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/semester': {
+      id: '/_authenticated/admin/semester'
+      path: '/admin/semester'
+      fullPath: '/admin/semester'
+      preLoaderRoute: typeof AuthenticatedAdminSemesterRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/timetable': {
+      id: '/_authenticated/admin/timetable'
+      path: '/admin/timetable'
+      fullPath: '/admin/timetable'
+      preLoaderRoute: typeof AuthenticatedAdminTimetableRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminCoursesRoute: typeof AuthenticatedAdminCoursesRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
+  AuthenticatedAdminFacultyRoute: typeof AuthenticatedAdminFacultyRoute
   AuthenticatedAdminGenerateRoute: typeof AuthenticatedAdminGenerateRoute
+  AuthenticatedAdminRoomsRoute: typeof AuthenticatedAdminRoomsRoute
+  AuthenticatedAdminSemesterRoute: typeof AuthenticatedAdminSemesterRoute
+  AuthenticatedAdminTimetableRoute: typeof AuthenticatedAdminTimetableRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminCoursesRoute: AuthenticatedAdminCoursesRoute,
   AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
+  AuthenticatedAdminFacultyRoute: AuthenticatedAdminFacultyRoute,
   AuthenticatedAdminGenerateRoute: AuthenticatedAdminGenerateRoute,
+  AuthenticatedAdminRoomsRoute: AuthenticatedAdminRoomsRoute,
+  AuthenticatedAdminSemesterRoute: AuthenticatedAdminSemesterRoute,
+  AuthenticatedAdminTimetableRoute: AuthenticatedAdminTimetableRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

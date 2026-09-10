@@ -35,7 +35,15 @@ export const Route = createFileRoute("/_authenticated/admin/dashboard")({
   ),
 });
 
-function Stat({ label, value, hint }: { label: string; value: string | number; hint?: string }) {
+function Stat({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string | number;
+  hint?: string | undefined;
+}) {
   return (
     <div className="panel p-5">
       <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
