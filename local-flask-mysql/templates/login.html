@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Sign in · AI Course Timetable{% endblock %}
+{% block wrapclass %}auth{% endblock %}
+{% block content %}
+<div class="panel">
+  <h1>Sign in</h1>
+  <p class="sub">Use the account your college administrator created for you.</p>
+  <form method="post">
+    <div><label>Username</label><input name="username" required></div>
+    <div><label>Password</label><input type="password" name="password" required></div>
+    <button type="submit" style="width:100%">Sign in</button>
+  </form>
+  <p class="sub">No account yet? <a href="{{ url_for('register') }}">Register</a></p>
+</div>
+{% endblock %}

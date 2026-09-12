@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Courses · AI Course Timetable{% endblock %}
+{% block content %}
+<h1>Courses</h1>
+<p class="sub">Hours and weekly patterns follow the credit rules automatically.</p>
+
+<div class="panel">
+  <form method="post" class="inline-form">
+    <div><label>Code</label><input name="code" required></div>
+    <div><label>Name</label><input name="name" required></div>
+    <div>
+      <label>Credit</label>
+      <select name="credit">
+        {% for c, rule in credit_rules.items() %}
+        <option value="{{ c }}">{{ c }} credits — {{ rule[0] }}h, {{ rule[1] }}/week</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label>Type</label>
+      <select name="course_type"><option>Theory</option><option>Lab</option></select>
+    </div>
+    <div>
+      <label>Faculty</label>
+      <select name="faculty_id">
+        <option value="">Unassigned</option>
+        {% for f in faculty %}<option value="{{ f.id }}">{{ f.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label>Department</label>
+      <select name="department">{% for d in ['CSE','ECE','EEE','MECH'] %}<option>{{ d }}</option>{% endfor %}</select>
+    </div>
+    <div><label>Section</label><select name="section"><option>A</option><option>B</option></select></div>
+    <div><label>Students</label><input type="number" name="student_count" value="60" min="1"></div>
+    <div>
+      <label>Room type</label>
+      <select name="room_type"><option>Classroom</option><option>Lab</option></select>
+    </div>
+    <div><button type="submit">Add course</button></div>
+  </form>
+</div>
+
+<div class="panel">
+  <table>
+    <thead>
+      <tr><th>Code</th><th>Name</th><th>Class</th><th>Credit</th><th>Hours</th>
+          <th>Weekly</th><th>Max/day</th><th>Block</th><th>Room</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for c in courses %}
+      <tr>
+        <td><strong>{{ c.code }}</strong></td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.department }}-{{ c.section }}</td>
+        <td>{{ c.credit }}</td>
+        <td>{{ c.required_hours }}</td>
+        <td>{{ c.periods_per_week }}</td>
+        <td>{{ c.max_periods_per_day }}</td>
+        <td>{{ 'Yes' if c.consecutive_block else 'No' }}</td>
+        <td>{{ c.room_type }}</td>
+        <td>
+          <form method="post" onsubmit="return confirm('Delete this course?')">
+            <input type="hidden" name="delete_id" value="{{ c.id }}">
+            <button class="link" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

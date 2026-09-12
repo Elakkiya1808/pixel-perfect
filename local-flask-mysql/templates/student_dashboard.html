@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Student dashboard · AI Course Timetable{% endblock %}
+{% block content %}
+<h1>{{ dept }} — Section {{ sec }}</h1>
+<p class="sub">Your class overview for this semester.</p>
+
+<div class="panel">
+  <div class="stats">
+    <div class="stat"><div class="label">Courses</div><div class="value">{{ courses|length }}</div></div>
+    <div class="stat"><div class="label">Weekly periods</div><div class="value">{{ entries|length }}</div></div>
+    <div class="stat"><div class="label">Total credits</div>
+      <div class="value">{{ courses|sum(attribute='credit') }}</div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2 style="margin-top:0;font-size:16px">Periods per day</h2>
+  <div class="stats">
+    {% for d in days %}
+    <div class="stat">
+      <div class="label">{{ d }}</div>
+      <div class="value">{{ entries | selectattr('day', 'equalto', d) | list | length }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="panel">
+  <table>
+    <thead><tr><th>Code</th><th>Course</th><th>Type</th><th>Credit</th><th>Weekly periods</th></tr></thead>
+    <tbody>
+      {% for c in courses %}
+      <tr>
+        <td><strong>{{ c.code }}</strong></td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.course_type }}</td>
+        <td>{{ c.credit }}</td>
+        <td>{{ c.periods_per_week }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

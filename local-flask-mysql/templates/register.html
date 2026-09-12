@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Register · AI Course Timetable{% endblock %}
+{% block wrapclass %}auth{% endblock %}
+{% block content %}
+<div class="panel">
+  <h1>Create account</h1>
+  <p class="sub">Faculty and student accounts only. Administrators are created separately.</p>
+  <form method="post">
+    <div><label>Full name</label><input name="full_name" required></div>
+    <div><label>Username</label><input name="username" required></div>
+    <div><label>Password</label><input type="password" name="password" required minlength="6"></div>
+    <div>
+      <label>I am a</label>
+      <select name="role" id="role" onchange="toggle()">
+        <option value="student">Student</option>
+        <option value="faculty">Faculty</option>
+      </select>
+    </div>
+    <div id="facultyBlock" style="display:none">
+      <label>Faculty record</label>
+      <select name="faculty_id">
+        <option value="">Not linked yet</option>
+        {% for f in faculty %}<option value="{{ f.id }}">{{ f.name }} — {{ f.department }}</option>{% endfor %}
+      </select>
+    </div>
+    <div id="studentBlock">
+      <label>Department</label>
+      <select name="department">
+        {% for d in ['CSE','ECE','EEE','MECH'] %}<option>{{ d }}</option>{% endfor %}
+      </select>
+      <label style="margin-top:10px">Section</label>
+      <select name="section"><option>A</option><option>B</option></select>
+    </div>
+    <button type="submit" style="width:100%">Create account</button>
+  </form>
+  <p class="sub"><a href="{{ url_for('login') }}">Back to sign in</a></p>
+</div>
+<script>
+function toggle() {
+  const role = document.getElementById('role').value;
+  document.getElementById('facultyBlock').style.display = role === 'faculty' ? 'block' : 'none';
+  document.getElementById('studentBlock').style.display = role === 'student' ? 'block' : 'none';
+}
+</script>
+{% endblock %}

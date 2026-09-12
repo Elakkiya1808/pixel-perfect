@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Semester settings · AI Course Timetable{% endblock %}
+{% block content %}
+<h1>Semester settings</h1>
+<p class="sub">Required teaching hours stay separate from the weekly timetable pattern.</p>
+
+<div class="panel">
+  <form method="post" class="inline-form">
+    <div><label>Semester name</label><input name="semester_name" value="{{ settings.semester_name }}" required></div>
+    <div><label>Start date</label><input type="date" name="semester_start_date" value="{{ settings.semester_start_date or '' }}"></div>
+    <div><label>End date</label><input type="date" name="semester_end_date" value="{{ settings.semester_end_date or '' }}"></div>
+    <div><label>Months</label><input type="number" name="semester_months" value="{{ settings.semester_months }}"></div>
+    <div><label>Teaching weeks</label><input type="number" name="teaching_weeks" value="{{ settings.teaching_weeks }}"></div>
+    <div><label>Period minutes</label><input type="number" name="period_duration_minutes" value="{{ settings.period_duration_minutes }}"></div>
+    <div><button type="submit">Save settings</button></div>
+  </form>
+</div>
+
+<div class="panel">
+  <h2 style="margin-top:0;font-size:16px">Daily period timings</h2>
+  <table>
+    <tbody>
+      {% for t in timings %}
+      <tr><td style="width:120px"><strong>Period {{ loop.index }}</strong></td><td>{{ t }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

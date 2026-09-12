@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · AI Course Timetable{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+<p class="sub">Monday to Friday, seven periods a day.</p>
+
+{% if filters %}
+<div class="panel">
+  <form class="row" method="get">
+    <div>
+      <label>Department</label>
+      <select name="department">
+        <option value="">All departments</option>
+        {% for d in departments %}
+          <option value="{{ d }}" {% if selected.department == d %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label>Section</label>
+      <select name="section">
+        <option value="">All</option>
+        {% for s in ['A','B'] %}
+          <option value="{{ s }}" {% if selected.section == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label>Faculty</label>
+      <select name="faculty_id">
+        <option value="">All faculty</option>
+        {% for f in faculty %}
+          <option value="{{ f.id }}" {% if selected.faculty_id == f.id|string %}selected{% endif %}>{{ f.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit">Apply</button>
+  </form>
+</div>
+{% endif %}
+
+<div class="panel">
+  <table class="grid-table">
+    <thead>
+      <tr>
+        <th style="width:140px">Period</th>
+        {% for d in days %}<th>{{ d }}</th>{% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in periods %}
+      <tr>
+        <td><strong>Period {{ p }}</strong><div class="meta" style="font-size:12px;color:#6b7280">{{ timings[p-1] }}</div></td>
+        {% for d in days %}
+        <td>
+          {% set cell = cells[(d, p)] %}
+          {% if cell %}
+            {% for e in cell %}
+            <div class="slot {% if e.course_type == 'Lab' %}lab{% endif %}">
+              <div class="code">{{ e.code }}</div>
+              <div class="meta">{{ e.course_name }}</div>
+              <div>{{ e.faculty_name or 'Unassigned' }}</div>
+              <div class="meta">{{ e.room_number or 'No room' }} · {{ e.department }}-{{ e.section }}</div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty"></div>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
