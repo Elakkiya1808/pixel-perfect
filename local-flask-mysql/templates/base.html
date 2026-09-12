@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AI Course Timetable{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if session.get('user_id') %}
+<header class="topbar">
+  <div class="brand">AI Course Timetable</div>
+  <nav>
+    {% if session.role == 'admin' %}
+      <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('admin_generate') }}">Generate</a>
+      <a href="{{ url_for('admin_timetable') }}">Timetable</a>
+      <a href="{{ url_for('admin_courses') }}">Courses</a>
+      <a href="{{ url_for('admin_faculty') }}">Faculty</a>
+      <a href="{{ url_for('admin_rooms') }}">Rooms</a>
+      <a href="{{ url_for('admin_semester') }}">Semester</a>
+    {% elif session.role == 'faculty' %}
+      <a href="{{ url_for('faculty_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('faculty_timetable') }}">My timetable</a>
+    {% else %}
+      <a href="{{ url_for('student_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('student_timetable') }}">Class timetable</a>
+    {% endif %}
+  </nav>
+  <div class="user">{{ session.full_name or session.username }} · {{ session.role }}</div>
+  <a href="{{ url_for('logout') }}" style="color:#cfd6f0;font-size:13px;">Sign out</a>
+</header>
+{% endif %}
+
+<div class="{% block wrapclass %}wrap{% endblock %}">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>
