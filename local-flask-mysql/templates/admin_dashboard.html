@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Admin dashboard · AI Course Timetable{% endblock %}
+{% block content %}
+<h1>Administrator dashboard</h1>
+<p class="sub">Overview of your scheduling data and the latest generation run.</p>
+
+<div class="panel">
+  <div class="stats">
+    <div class="stat"><div class="label">Courses</div><div class="value">{{ counts.courses }}</div></div>
+    <div class="stat"><div class="label">Faculty</div><div class="value">{{ counts.faculty }}</div></div>
+    <div class="stat"><div class="label">Rooms</div><div class="value">{{ counts.rooms }}</div></div>
+    <div class="stat"><div class="label">Scheduled periods</div><div class="value">{{ counts.periods }}</div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2 style="margin-top:0;font-size:16px">Latest generation</h2>
+  {% if run %}
+  <div class="stats">
+    <div class="stat"><div class="label">Starting score</div><div class="value">{{ run.initial_fitness }}</div></div>
+    <div class="stat"><div class="label">Optimised score</div><div class="value">{{ run.optimized_fitness }}</div></div>
+    <div class="stat"><div class="label">Validation</div><div class="value">{{ run.validation_score }}%</div></div>
+    <div class="stat"><div class="label">Clashes</div><div class="value">{{ run.hard_violations }}</div></div>
+  </div>
+  <p class="sub" style="margin-top:14px">Generated {{ run.created_at }}</p>
+  {% else %}
+  <p class="sub">No timetable generated yet. Head to <a href="{{ url_for('admin_generate') }}">Generate</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

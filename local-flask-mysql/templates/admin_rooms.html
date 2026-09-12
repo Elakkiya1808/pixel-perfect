@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Rooms · AI Course Timetable{% endblock %}
+{% block content %}
+<h1>Rooms</h1>
+<p class="sub">The scheduler always picks the smallest suitable free room.</p>
+
+<div class="panel">
+  <form method="post" class="inline-form">
+    <div><label>Room number</label><input name="room_number" required></div>
+    <div>
+      <label>Type</label>
+      <select name="room_type"><option>Classroom</option><option>Lab</option></select>
+    </div>
+    <div><label>Capacity</label><input type="number" name="capacity" value="60" min="1"></div>
+    <div><button type="submit">Add room</button></div>
+  </form>
+</div>
+
+<div class="panel">
+  <table>
+    <thead><tr><th>Room</th><th>Type</th><th>Capacity</th><th></th></tr></thead>
+    <tbody>
+      {% for r in rooms %}
+      <tr>
+        <td><strong>{{ r.room_number }}</strong></td>
+        <td>{{ r.room_type }}</td>
+        <td>{{ r.capacity }}</td>
+        <td>
+          <form method="post" onsubmit="return confirm('Remove this room?')">
+            <input type="hidden" name="delete_id" value="{{ r.id }}">
+            <button class="link" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

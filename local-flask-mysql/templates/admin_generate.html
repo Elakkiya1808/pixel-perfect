@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Generate timetable · AI Course Timetable{% endblock %}
+{% block content %}
+<h1>Generate timetable</h1>
+<p class="sub">Graph colouring builds a clash-free start, then the genetic algorithm improves it.</p>
+
+<div class="panel">
+  <form method="post" class="row">
+    <button type="submit" name="action" value="generate">Generate timetable</button>
+    <button type="submit" name="action" value="validate" class="secondary">Validate current</button>
+    <button type="submit" name="action" value="reset" class="danger"
+            onclick="return confirm('Clear the whole timetable?')">Clear timetable</button>
+  </form>
+</div>
+
+{% if result %}
+<div class="panel">
+  <h2 style="margin-top:0;font-size:16px">Result</h2>
+  {% if result.issues is defined %}
+    <p>
+      Status:
+      {% if result.valid %}<span class="badge ok">Valid</span>
+      {% else %}<span class="badge bad">Needs attention</span>{% endif %}
+    </p>
+    <ul>
+      {% for issue in result.issues %}<li>{{ issue }}</li>{% endfor %}
+      {% if not result.issues %}<li>No problems found.</li>{% endif %}
+    </ul>
+  {% else %}
+  <div class="stats">
+    <div class="stat"><div class="label">Starting score</div><div class="value">{{ result.initial_fitness }}</div></div>
+    <div class="stat"><div class="label">Optimised score</div><div class="value">{{ result.optimized_fitness }}</div></div>
+    <div class="stat"><div class="label">Clashes</div><div class="value">{{ result.hard_violations }}</div></div>
+    <div class="stat"><div class="label">Idle gaps</div><div class="value">{{ result.soft_violations }}</div></div>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

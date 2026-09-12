@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Faculty · AI Course Timetable{% endblock %}
+{% block content %}
+<h1>Faculty</h1>
+<p class="sub">People available for course allocation.</p>
+
+<div class="panel">
+  <form method="post" class="inline-form">
+    <div><label>Name</label><input name="name" required></div>
+    <div><label>Department</label><input name="department" value="CSE" required></div>
+    <div><label>Email</label><input type="email" name="email" required></div>
+    <div><button type="submit">Add faculty</button></div>
+  </form>
+</div>
+
+<div class="panel">
+  <table>
+    <thead><tr><th>Name</th><th>Department</th><th>Email</th><th></th></tr></thead>
+    <tbody>
+      {% for f in faculty %}
+      <tr>
+        <td><strong>{{ f.name }}</strong></td>
+        <td>{{ f.department }}</td>
+        <td>{{ f.email }}</td>
+        <td>
+          <form method="post" onsubmit="return confirm('Remove this faculty member?')">
+            <input type="hidden" name="delete_id" value="{{ f.id }}">
+            <button class="link" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
