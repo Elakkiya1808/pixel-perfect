@@ -62,8 +62,9 @@ def build_conflict_graph(units):
 
 
 def graph_colouring(graph, units):
-    """DSATUR ordering, then assign each unit the first slot free of conflicts."""
-    order = nx.coloring.strategy_saturation_largest_first(graph, {})
+    """DSATUR colouring, then assign each unit the first slot free of conflicts."""
+    colours = nx.coloring.greedy_color(graph, strategy="DSATUR")
+    order = sorted(graph.nodes, key=lambda n: (colours.get(n, 0), -graph.degree(n)))
     by_id = {u["id"]: u for u in units}
     assignment = {}
     for node in order:
