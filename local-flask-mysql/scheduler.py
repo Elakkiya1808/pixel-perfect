@@ -200,7 +200,11 @@ def count_violations(placements, rooms):
 
 def genetic_optimise(units, rooms, base_assignment, population=30, generations=50,
                      crossover_rate=0.8, mutation_rate=0.1, elite=2):
+    """Each individual is scored exactly once per generation and carried as (fitness, assignment)."""
     node_ids = list(base_assignment.keys())
+
+    def fitness(assignment):
+        return evaluate(assignment, units, rooms)[0]
 
     def random_variant(source):
         variant = {k: list(v) for k, v in source.items()}
@@ -209,25 +213,25 @@ def genetic_optimise(units, rooms, base_assignment, population=30, generations=5
                 variant[node] = _random_run(len(variant[node]))
         return variant
 
-    pop = [dict(base_assignment)] + [random_variant(base_assignment) for _ in range(population - 1)]
-    best = max(pop, key=lambda a: evaluate(a, units, rooms)[0])
-    initial_fitness = evaluate(base_assignment, units, rooms)[0]
+    initial_fitness = fitness(base_assignment)
+    pop = [{k: list(v) for k, v in base_assignment.items()}]
+    pop += [random_variant(base_assignment) for _ in range(population - 1)]
+    scored = sorted(((fitness(a), a) for a in pop), key=lambda x: x[0], reverse=True)
+    best_score, best = scored[0]
 
     for _ in range(generations):
-        scored = sorted(pop, key=lambda a: evaluate(a, units, rooms)[0], reverse=True)
-        next_pop = [dict(a) for a in scored[:elite]]
+        next_pop = [{k: list(v) for k, v in a.items()} for _, a in scored[:elite]]
         while len(next_pop) < population:
-            p1 = _tournament(scored, units, rooms)
-            p2 = _tournament(scored, units, rooms)
+            p1 = _tournament(scored)
+            p2 = _tournament(scored)
             child = _crossover(p1, p2, node_ids) if random.random() < crossover_rate else dict(p1)
             for node in node_ids:
                 if random.random() < mutation_rate:
                     child[node] = _random_run(len(child[node]))
             next_pop.append(child)
-        pop = next_pop
-        candidate = max(pop, key=lambda a: evaluate(a, units, rooms)[0])
-        if evaluate(candidate, units, rooms)[0] > evaluate(best, units, rooms)[0]:
-            best = candidate
+        scored = sorted(((fitness(a), a) for a in next_pop), key=lambda x: x[0], reverse=True)
+        if scored[0][0] > best_score:
+            best_score, best = scored[0]
 
     return best, initial_fitness
 
@@ -241,9 +245,9 @@ def _random_run(length):
     return [SLOTS[0]] * length
 
 
-def _tournament(scored, units, rooms, k=3):
+def _tournament(scored, k=3):
     picks = random.sample(scored, min(k, len(scored)))
-    return max(picks, key=lambda a: evaluate(a, units, rooms)[0])
+    return max(picks, key=lambda x: x[0])[1]
 
 
 def _crossover(a, b, node_ids):
