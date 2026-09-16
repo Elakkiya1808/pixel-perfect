@@ -93,7 +93,17 @@ function AuthPage() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: window.location.origin },
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: {
+          username: username || email,
+          full_name: username || null,
+          role,
+          faculty_id: role === "faculty" && facultyId ? facultyId : null,
+          department: role === "student" ? department : null,
+          section: role === "student" ? section : null,
+        },
+      },
     });
     if (error || !data.user) {
       setLoading(false);
@@ -101,24 +111,14 @@ function AuthPage() {
       return;
     }
 
-    const userId = data.user.id;
-    const { error: profileError } = await supabase.from("profiles").insert({
-      id: userId,
-      username: username || email,
-      full_name: username || null,
-      faculty_id: role === "faculty" && facultyId ? facultyId : null,
-      department: role === "student" ? department : null,
-      section: role === "student" ? section : null,
-    });
-    const { error: roleError } = await supabase
-      .from("user_roles")
-      .insert({ user_id: userId, role });
-    setLoading(false);
-
-    if (profileError || roleError) {
-      toast.error("Account created, but the profile could not be saved. Please sign in again.");
+    if (!data.session) {
+      setLoading(false);
+      toast.success("Account created. Check your email to confirm, then sign in.");
       return;
     }
+
+    await ensureProfile();
+    setLoading(false);
     toast.success("Account created");
     await goHome();
   };
