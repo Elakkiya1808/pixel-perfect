@@ -45,6 +45,5 @@ export function useProfile() {
 export function homeRouteFor(role: AppRole | null): string {
   if (role === "admin") return "/admin/dashboard";
   if (role === "faculty") return "/faculty/dashboard";
-  if (role === "student") return "/student/dashboard";
-  return "/auth";
+  return "/student/dashboard";
 }

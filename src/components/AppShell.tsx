@@ -26,6 +26,7 @@ const NAV: Record<AppRole, Array<{ to: string; label: string; icon: typeof Layou
     { to: "/admin/generate", label: "Generate", icon: ShieldCheck },
     { to: "/admin/timetable", label: "Timetable", icon: CalendarDays },
     { to: "/admin/semester", label: "Semester", icon: Settings },
+    { to: "/admin/users", label: "Users", icon: Users },
   ],
   faculty: [
     { to: "/faculty/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -45,9 +46,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const items = profile?.role ? NAV[profile.role] : [];
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    await queryClient.cancelQueries();
     queryClient.clear();
-    navigate({ to: "/auth" });
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
   };
 
   return (
