@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchFaculty } from "@/lib/queries";
 import { homeRouteFor, type AppRole } from "@/hooks/useProfile";
+import { ensureProfile } from "@/lib/profile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,11 +63,7 @@ function AuthPage() {
   const goHome = async () => {
     const { data } = await supabase.auth.getUser();
     if (!data.user) return;
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", data.user.id);
-    const userRole = (roles?.[0]?.role as AppRole | undefined) ?? null;
+    const userRole = await ensureProfile();
     await queryClient.invalidateQueries();
     navigate({ to: homeRouteFor(userRole) });
   };
@@ -96,7 +93,17 @@ function AuthPage() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: window.location.origin },
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: {
+          username: username || email,
+          full_name: username || null,
+          role,
+          faculty_id: role === "faculty" && facultyId ? facultyId : null,
+          department: role === "student" ? department : null,
+          section: role === "student" ? section : null,
+        },
+      },
     });
     if (error || !data.user) {
       setLoading(false);
@@ -104,24 +111,14 @@ function AuthPage() {
       return;
     }
 
-    const userId = data.user.id;
-    const { error: profileError } = await supabase.from("profiles").insert({
-      id: userId,
-      username: username || email,
-      full_name: username || null,
-      faculty_id: role === "faculty" && facultyId ? facultyId : null,
-      department: role === "student" ? department : null,
-      section: role === "student" ? section : null,
-    });
-    const { error: roleError } = await supabase
-      .from("user_roles")
-      .insert({ user_id: userId, role });
-    setLoading(false);
-
-    if (profileError || roleError) {
-      toast.error("Account created, but the profile could not be saved. Please sign in again.");
+    if (!data.session) {
+      setLoading(false);
+      toast.success("Account created. Check your email to confirm, then sign in.");
       return;
     }
+
+    await ensureProfile();
+    setLoading(false);
     toast.success("Account created");
     await goHome();
   };
@@ -213,7 +210,7 @@ function AuthPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="admin">Admin</SelectItem>
+                      
                       <SelectItem value="faculty">Faculty</SelectItem>
                       <SelectItem value="student">Student / Section</SelectItem>
                     </SelectContent>
