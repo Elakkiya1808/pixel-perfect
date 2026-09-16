@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchFaculty } from "@/lib/queries";
 import { homeRouteFor, type AppRole } from "@/hooks/useProfile";
+import { ensureProfile } from "@/lib/profile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,11 +63,7 @@ function AuthPage() {
   const goHome = async () => {
     const { data } = await supabase.auth.getUser();
     if (!data.user) return;
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", data.user.id);
-    const userRole = (roles?.[0]?.role as AppRole | undefined) ?? null;
+    const userRole = await ensureProfile();
     await queryClient.invalidateQueries();
     navigate({ to: homeRouteFor(userRole) });
   };
