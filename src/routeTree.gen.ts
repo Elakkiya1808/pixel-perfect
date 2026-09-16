@@ -19,6 +19,7 @@ import { Route as AuthenticatedAdminGenerateRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminRoomsRouteImport } from './routes/_authenticated/admin/rooms'
 import { Route as AuthenticatedAdminSemesterRouteImport } from './routes/_authenticated/admin/semester'
 import { Route as AuthenticatedAdminTimetableRouteImport } from './routes/_authenticated/admin/timetable'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin/users'
 import { Route as AuthenticatedFacultyDashboardRouteImport } from './routes/_authenticated/faculty/dashboard'
 import { Route as AuthenticatedFacultyTimetableRouteImport } from './routes/_authenticated/faculty/timetable'
 import { Route as AuthenticatedStudentDashboardRouteImport } from './routes/_authenticated/student/dashboard'
@@ -79,6 +80,11 @@ const AuthenticatedAdminTimetableRoute =
     path: '/admin/timetable',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFacultyDashboardRoute =
   AuthenticatedFacultyDashboardRouteImport.update({
     id: '/faculty/dashboard',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/admin/rooms': typeof AuthenticatedAdminRoomsRoute
   '/admin/semester': typeof AuthenticatedAdminSemesterRoute
   '/admin/timetable': typeof AuthenticatedAdminTimetableRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/faculty/dashboard': typeof AuthenticatedFacultyDashboardRoute
   '/faculty/timetable': typeof AuthenticatedFacultyTimetableRoute
   '/student/dashboard': typeof AuthenticatedStudentDashboardRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/admin/rooms': typeof AuthenticatedAdminRoomsRoute
   '/admin/semester': typeof AuthenticatedAdminSemesterRoute
   '/admin/timetable': typeof AuthenticatedAdminTimetableRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/faculty/dashboard': typeof AuthenticatedFacultyDashboardRoute
   '/faculty/timetable': typeof AuthenticatedFacultyTimetableRoute
   '/student/dashboard': typeof AuthenticatedStudentDashboardRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/rooms': typeof AuthenticatedAdminRoomsRoute
   '/_authenticated/admin/semester': typeof AuthenticatedAdminSemesterRoute
   '/_authenticated/admin/timetable': typeof AuthenticatedAdminTimetableRoute
+  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/faculty/dashboard': typeof AuthenticatedFacultyDashboardRoute
   '/_authenticated/faculty/timetable': typeof AuthenticatedFacultyTimetableRoute
   '/_authenticated/student/dashboard': typeof AuthenticatedStudentDashboardRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/admin/rooms'
     | '/admin/semester'
     | '/admin/timetable'
+    | '/admin/users'
     | '/faculty/dashboard'
     | '/faculty/timetable'
     | '/student/dashboard'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/admin/rooms'
     | '/admin/semester'
     | '/admin/timetable'
+    | '/admin/users'
     | '/faculty/dashboard'
     | '/faculty/timetable'
     | '/student/dashboard'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/rooms'
     | '/_authenticated/admin/semester'
     | '/_authenticated/admin/timetable'
+    | '/_authenticated/admin/users'
     | '/_authenticated/faculty/dashboard'
     | '/_authenticated/faculty/timetable'
     | '/_authenticated/student/dashboard'
@@ -278,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminTimetableRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/users': {
+      id: '/_authenticated/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/faculty/dashboard': {
       id: '/_authenticated/faculty/dashboard'
       path: '/faculty/dashboard'
@@ -317,6 +336,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoomsRoute: typeof AuthenticatedAdminRoomsRoute
   AuthenticatedAdminSemesterRoute: typeof AuthenticatedAdminSemesterRoute
   AuthenticatedAdminTimetableRoute: typeof AuthenticatedAdminTimetableRoute
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedFacultyDashboardRoute: typeof AuthenticatedFacultyDashboardRoute
   AuthenticatedFacultyTimetableRoute: typeof AuthenticatedFacultyTimetableRoute
   AuthenticatedStudentDashboardRoute: typeof AuthenticatedStudentDashboardRoute
@@ -331,6 +351,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoomsRoute: AuthenticatedAdminRoomsRoute,
   AuthenticatedAdminSemesterRoute: AuthenticatedAdminSemesterRoute,
   AuthenticatedAdminTimetableRoute: AuthenticatedAdminTimetableRoute,
+  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedFacultyDashboardRoute: AuthenticatedFacultyDashboardRoute,
   AuthenticatedFacultyTimetableRoute: AuthenticatedFacultyTimetableRoute,
   AuthenticatedStudentDashboardRoute: AuthenticatedStudentDashboardRoute,
