@@ -210,7 +210,7 @@ function AuthPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="admin">Admin</SelectItem>
+                      
                       <SelectItem value="faculty">Faculty</SelectItem>
                       <SelectItem value="student">Student / Section</SelectItem>
                     </SelectContent>
