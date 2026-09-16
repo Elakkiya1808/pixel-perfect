@@ -9,6 +9,7 @@
 - [x] Student: dashboard + class timetable
 - [x] Local Flask + MySQL version in `local-flask-mysql/` (schema, engine, app, templates, README)
 
+- [x] Sign-up saves profile + role reliably; admin role is admin-only (Admin > Users page)
+
 ## Open
-- [ ] Sign-up currently lets anyone choose the administrator role in the online version.
-      Recommend restricting it so only an existing administrator can create admin accounts.
+- (none)
